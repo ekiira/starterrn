@@ -1,95 +1,86 @@
 import { useState } from "react";
-import { StyleSheet, Text, View, Button, TextInput, Image } from "react-native";
+import { StyleSheet, View, ScrollView, Text, FlatList } from "react-native";
+
+interface IDataProps {
+  name: string;
+  age: number;
+  id: string;
+}
 
 export default function App() {
-  const [visible, setVisible] = useState(false);
-  const [name, setName] = useState("");
-  const [password, setPassword] = useState("");
-  const [data, setData] = useState({
-    name: "",
-    password: "",
-  });
+  const data: Array<IDataProps> = [
+    {
+      name: "Rachel Jay",
+      age: 21,
+      id: "219",
+    },
+    {
+      name: "Bolanle Jay",
+      age: 18,
+      id: "220",
+    },
+    {
+      name: "Seun A",
+      age: 15,
+      id: "221",
+    },
+    {
+      name: "Damola A",
+      age: 33,
+      id: "222",
+    },
+    {
+      name: "Oluwatosin",
+      age: 89,
+      id: "223",
+    },
+    {
+      name: "Victoria",
+      age: 34,
+      id: "224",
+    },
+  ];
 
-  const submitForm = () => {
-    if (name && password) {
-      setData({
-        ...data,
-        name,
-        password,
-      });
-      setVisible(true);
-      setName("");
-      setPassword("");
-    } else {
-      setVisible(false);
-    }
-  };
   return (
     <View style={styles.container}>
-      <Image
-        style={styles.image}
-        source={{
-          uri: "https://images.unsplash.com/photo-1641157141085-8454fbc33f3c?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1740&q=80",
-        }}
-      />
-      <View>
-        {visible ? (
-          <Text style={styles.textField}>
-            My name is {data?.name} and my password is {data.password}
+      <Text style={styles.header}>Using Scrollview and map list</Text>
+      <ScrollView>
+        {data.map((item) => (
+          <Text key={item.id} style={styles.item}>
+            {item.name}
           </Text>
-        ) : null}
-      </View>
+        ))}
+      </ScrollView>
 
-      <View style={styles.buttonContainer}>
-        <TextInput
-          style={styles.input}
-          value={name}
-          onChangeText={(val) => setName(val)}
-          placeholder="Enter Name"
-          placeholderTextColor="#fff"
-          autoCorrect={true}
-        />
+      <Text style={styles.header}>Using Flatlist</Text>
 
-        <TextInput
-          style={styles.input}
-          value={password}
-          onChangeText={(val) => setPassword(val)}
-          placeholder="Enter Password"
-          textContentType="password"
-          secureTextEntry={true}
-          placeholderTextColor="#fff"
-        />
-
-        <Button title="Submit" onPress={submitForm} />
-      </View>
+      <FlatList
+        data={data}
+        renderItem={({ item }) => <Text style={styles.item}>{item.name}</Text>}
+        keyExtractor={(item) => item.id}
+      />
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    paddingHorizontal: 20,
+    paddingVertical: 30,
     backgroundColor: "#000",
-    justifyContent: "center",
-    alignItems: "center",
+    height: "100%",
   },
-  image: {
-    width: 300,
-    height: 200,
-  },
-  textField: {
+  header: {
     color: "#fff",
-    marginTop: 30,
+    fontSize: 30,
+    textAlign: "center",
+    marginVertical: 20,
   },
-  input: {
-    borderColor: "gray",
-    borderWidth: 2,
-    marginBottom: 20,
-    width: 300,
-    color: "#fff",
-    padding: 10,
-  },
-  buttonContainer: {
-    marginTop: 20,
+  item: {
+    color: "#000",
+    backgroundColor: "#fff",
+    paddingHorizontal: 20,
+    paddingVertical: 50,
+    margin: 10,
   },
 });
