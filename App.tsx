@@ -1,5 +1,11 @@
 import { useState } from "react";
-import { StyleSheet, View, ScrollView, Text, FlatList } from "react-native";
+import {
+  StyleSheet,
+  View,
+  Text,
+  FlatList,
+  TouchableOpacity,
+} from "react-native";
 
 interface IDataProps {
   name: string;
@@ -8,7 +14,7 @@ interface IDataProps {
 }
 
 export default function App() {
-  const data: Array<IDataProps> = [
+  const [data, setData] = useState<Array<IDataProps>>([
     {
       name: "Rachel Jay",
       age: 21,
@@ -39,25 +45,25 @@ export default function App() {
       age: 34,
       id: "224",
     },
-  ];
+  ]);
+
+  const pressHandler = (id: string) => {
+    setData((prevState) => {
+      return prevState.filter(item => item.id != id)
+    })
+  }
 
   return (
     <View style={styles.container}>
-      <Text style={styles.header}>Using Scrollview and map list</Text>
-      <ScrollView>
-        {data.map((item) => (
-          <Text key={item.id} style={styles.item}>
-            {item.name}
-          </Text>
-        ))}
-      </ScrollView>
-
-      <Text style={styles.header}>Using Flatlist</Text>
-
       <FlatList
         data={data}
-        renderItem={({ item }) => <Text style={styles.item}>{item.name}</Text>}
+        renderItem={({ item }) => (
+          <TouchableOpacity onPress={() => pressHandler(item.id)}>
+            <Text style={styles.item}>{item.name}</Text>
+          </TouchableOpacity>
+        )}
         keyExtractor={(item) => item.id}
+        numColumns={2}
       />
     </View>
   );
